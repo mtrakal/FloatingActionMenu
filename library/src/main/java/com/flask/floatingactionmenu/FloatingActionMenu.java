@@ -82,7 +82,7 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int buttonsHorizontalCenter = r - l - fabToggle.getMeasuredWidth() / 2;
         int labelMargin = getDimension(R.dimen.fab_label_margin);
-        boolean rtl = App.isRTL();
+        boolean rtl = isRTL();
         int labelOffset = rtl ? maxButtonWidth + labelMargin : maxButtonWidth / 2 + labelMargin;
         int labelXNearButton = rtl ? labelOffset : buttonsHorizontalCenter - labelOffset;
         int nextY = b - t;
@@ -283,5 +283,9 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
 
     protected TypedArray getTypedArray(Context context, AttributeSet attributeSet, int[] attr) {
         return context.obtainStyledAttributes(attributeSet, attr, 0, 0);
+    }
+
+    protected boolean isRTL() {
+        return getResources().getBoolean(R.bool.rtl);
     }
 }

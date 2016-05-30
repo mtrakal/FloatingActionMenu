@@ -1,6 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.flask.floatingactionmenu">
+<manifest package="com.flask.floatingactionmenu">
 
-	<application android:name=".App"/>
+	<application/>
 
 </manifest>
