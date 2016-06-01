@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <declare-styleable name="FloatingActionButton">
+        <attr name="fam_colorPressed" format="color" />
+        <attr name="fam_colorNormal" format="color" />
+        <attr name="fam_colorRipple" format="color" />
+        <attr name="fam_colorDisabled" format="color" />
+        <attr name="fam_shadow" format="boolean" />
+        <attr name="fam_type" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="mini" value="1" />
+        </attr>
+        <attr name="fam_normal_icon" format="reference" />
+        <attr name="fam_toggle_icon" format="reference" />
+        <attr name="fam_labelStyle" format="reference" />
+        <attr name="fam_labelText" format="string" />
+        <attr name="fam_fadingBackground" format="reference"/>
+        <attr name="fam_fadingColor" format="color"/>
+        <attr name="fam_defaultPressedColor" format="boolean"/>
+    </declare-styleable>
+</resources>

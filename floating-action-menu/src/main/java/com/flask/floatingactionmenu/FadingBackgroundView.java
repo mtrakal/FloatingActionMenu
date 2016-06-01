@@ -27,7 +27,7 @@ public class FadingBackgroundView extends View {
 		TypedArray attr = getTypedArray(context, attrs, R.styleable.FloatingActionButton);
 		if (attr != null) {
 			try {
-				color = attr.getColor(R.styleable.FloatingActionButton_fab_fadingColor, 0x80ffffff);
+				color = attr.getColor(R.styleable.FloatingActionButton_fam_fadingColor, 0x30000000);
 			} finally {
 				attr.recycle();
 			}

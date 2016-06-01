@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.annotation.DimenRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Property;
@@ -51,7 +52,7 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
         TypedArray attr = getTypedArray(context, attributeSet, R.styleable.FloatingActionButton);
         if (attr != null) {
             try {
-                labelsStyle = attr.getResourceId(R.styleable.FloatingActionButton_fab_labelStyle, 0);
+                labelsStyle = attr.getResourceId(R.styleable.FloatingActionButton_fam_labelStyle, 0);
             } finally {
                 attr.recycle();
             }
@@ -63,12 +64,15 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
         measureChildren(widthMeasureSpec, heightMeasureSpec);
 
         int width = fabToggle.getMeasuredWidth(), height = 0;
-        int labelMargin = getDimension(R.dimen.fab_label_margin);
+        int labelMargin = getDimension(R.dimen.fam_label_margin);
         int maxLabelWidth = 0;
 
         for (int i = 0; i < fabList.size(); i++) {
             FloatingActionButton fab = fabList.get(i);
 
+            if (fab == null) {
+                continue;
+            }
             width = Math.max(fab.getMeasuredWidth(), width);
             height += fab.getMeasuredHeight();
             maxLabelWidth = Math.max(maxLabelWidth, labelList.get(i).getMeasuredWidth());
@@ -81,7 +85,7 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         int buttonsHorizontalCenter = r - l - fabToggle.getMeasuredWidth() / 2;
-        int labelMargin = getDimension(R.dimen.fab_label_margin);
+        int labelMargin = getDimension(R.dimen.fam_label_margin);
         boolean rtl = isRTL();
         int labelOffset = rtl ? maxButtonWidth + labelMargin : maxButtonWidth / 2 + labelMargin;
         int labelXNearButton = rtl ? labelOffset : buttonsHorizontalCenter - labelOffset;
@@ -111,27 +115,13 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
         }
     }
 
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount - 1; i++) {
-            FloatingActionButton child = (FloatingActionButton) getChildAt(i);
-            child.setVisibility(INVISIBLE);
-            child.setClickable(false);
-            fabList.add(child);
-        }
-        setFloatingActionToggleButton((FloatingActionToggleButton) getChildAt(childCount - 1));
-        fabToggle.setVisibility(VISIBLE);
-        fabToggle.setClickable(true);
-
-        createLabels();
-    }
-
     private void createLabels() {
         Context context = new ContextThemeWrapper(getContext(), labelsStyle);
-
+        labelList.clear();
         for (FloatingActionButton fab : fabList) {
+            if (fab == null) {
+                continue;
+            }
             String labelText = fab.getLabelText();
 
             TextView label = new AutoVisibilityTextView(context);
@@ -145,10 +135,20 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
         }
     }
 
-    public void setFloatingActionToggleButton(FloatingActionToggleButton floatingActionToggleButton) {
+    public void setFloatingActionToggleButton(@NonNull FloatingActionToggleButton floatingActionToggleButton) {
         fabToggle = floatingActionToggleButton;
         fabToggle.setOnToggleListener(this);
-        fabList.add(fabToggle);
+        if (fabToggle != null) {
+            fabList.add(fabToggle);
+            addView(floatingActionToggleButton);
+        }
+    }
+
+    public void addFloatingActionButton(FloatingActionButton floatingActionButton) {
+        if (floatingActionButton != null) {
+            fabList.add(floatingActionButton);
+            addView(floatingActionButton);
+        }
     }
 
     public void setFadingBackgroundView(FadingBackgroundView fadingBackgroundView) {
@@ -156,7 +156,7 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
         this.fadingBackgroundView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fabToggle.toggleOff();
+                toggleOff();
             }
         });
         this.fadingBackgroundView.setFab(fabToggle);
@@ -166,6 +166,17 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
     public void onToggle(boolean isOn) {
         createExpandAnimations();
         createCollapseAnimations();
+    }
+
+    public boolean toggleOff() {
+        if(fabToggle == null) {
+            return false;
+        }
+        if(fabToggle.isToggleOn()) {
+            fabToggle.toggleOff();
+            return true;
+        }
+        return false;
     }
 
     private static final Interpolator interpolator = new DecelerateInterpolator();
@@ -287,5 +298,29 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
 
     protected boolean isRTL() {
         return getResources().getBoolean(R.bool.rtl);
+    }
+
+    public void build() {
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount - 1; i++) {
+            FloatingActionButton child = (FloatingActionButton) getChildAt(i);
+            child.setVisibility(INVISIBLE);
+            child.setClickable(false);
+//            fabList.add(child);
+        }
+//        setFloatingActionToggleButton((FloatingActionToggleButton) getChildAt(childCount - 1));
+        fabToggle.setVisibility(VISIBLE);
+        fabToggle.setClickable(true);
+
+        createLabels();
+    }
+
+    public void removeAllButtons() {
+        labelList.clear();
+        fabList.clear();
+        fabToggle = null;
+        toggleOffAnimator = null;
+        toggleOnAnimator = null;
+        removeAllViews();
     }
 }

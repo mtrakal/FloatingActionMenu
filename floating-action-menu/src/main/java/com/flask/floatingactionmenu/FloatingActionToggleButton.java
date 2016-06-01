@@ -54,7 +54,7 @@ public class FloatingActionToggleButton extends FloatingActionButton {
 		TypedArray attr = getTypedArray(context, attributeSet, R.styleable.FloatingActionButton);
 		if (attr != null) {
 			try {
-				toggleIcon = attr.getResourceId(R.styleable.FloatingActionButton_fab_toggle_icon, 0);
+				toggleIcon = attr.getResourceId(R.styleable.FloatingActionButton_fam_toggle_icon, 0);
 			} finally {
 				attr.recycle();
 			}
