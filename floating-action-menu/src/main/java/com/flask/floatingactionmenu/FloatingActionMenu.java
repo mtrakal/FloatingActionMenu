@@ -156,24 +156,35 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
         this.fadingBackgroundView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleOff();
+                toggleOff(false);
             }
         });
         this.fadingBackgroundView.setFab(fabToggle);
     }
 
     @Override
-    public void onToggle(boolean isOn) {
+    public void onToggle(boolean isOn, boolean immediately) {
         createExpandAnimations();
-        createCollapseAnimations();
+        if(!immediately) {
+            createCollapseAnimations();
+        } else {
+            for (FloatingActionButton fab : fabList) {
+                if (!fab.equals(fabToggle)) {
+                    fab.setVisibility(GONE);
+                }
+            }
+            for (TextView label : labelList) {
+                label.setVisibility(View.GONE);
+            }
+        }
     }
 
-    public boolean toggleOff() {
+    public boolean toggleOff(boolean immediately) {
         if(fabToggle == null) {
             return false;
         }
         if(fabToggle.isToggleOn()) {
-            fabToggle.toggleOff();
+            fabToggle.toggleOff(immediately);
             return true;
         }
         return false;
@@ -322,5 +333,10 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
         toggleOffAnimator = null;
         toggleOnAnimator = null;
         removeAllViews();
+    }
+
+    public void toggleOffImmediately() {
+        fadingBackgroundView.setAlpha(0f);
+        toggleOff(true);
     }
 }

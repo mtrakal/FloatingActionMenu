@@ -1,5 +1,5 @@
 package com.flask.floatingactionmenu;
 
 public interface OnToggleListener {
-	void onToggle(boolean isOn);
+	void onToggle(boolean isOn, boolean immediately);
 }

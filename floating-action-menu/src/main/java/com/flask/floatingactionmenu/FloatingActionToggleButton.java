@@ -84,24 +84,34 @@ public class FloatingActionToggleButton extends FloatingActionButton {
 	public void toggle() {
 		createAnimations();
 
-		if (!isOn) toggleOn();
-		else toggleOff();
+		if (!isOn) toggleOn(false);
+		else toggleOff(false);
 	}
 
-	public void toggleOn() {
+	public void toggleOn(boolean immediately) {
 		if (!isOn) {
-			if (onToggleListener != null) onToggleListener.onToggle(isOn);
+			if (onToggleListener != null) onToggleListener.onToggle(isOn, immediately);
 			toggleOffAnimator.cancel();
 			toggleOnAnimator.start();
 			isOn = true;
 		}
 	}
 
-	public void toggleOff() {
+	public void toggleOff(boolean immediately) {
 		if (isOn) {
-			if (onToggleListener != null) onToggleListener.onToggle(isOn);
+			if (onToggleListener != null) onToggleListener.onToggle(isOn, immediately);
 			toggleOnAnimator.cancel();
-			toggleOffAnimator.start();
+			if(!immediately){
+				toggleOffAnimator.start();
+			} else {
+				toggleOffAnimator.cancel();
+				toggleIconDrawable.setAlpha(0);
+				ObjectAnimator rotation = ObjectAnimator.ofFloat(rotatingDrawable, "rotation", EXPANDED_ROTATION, COLLAPSED_PLUS_ROTATION);
+				rotation.setInterpolator(interpolator);
+                rotation.setRepeatMode(ValueAnimator.RESTART);
+                rotation.start();
+				normalIconDrawable.setAlpha(255);
+			}
 			isOn = false;
 		}
 	}

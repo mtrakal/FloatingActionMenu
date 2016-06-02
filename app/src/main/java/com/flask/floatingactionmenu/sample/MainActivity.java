@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     toast(fab.getLabelText());
-                    floatingActionMenu.toggleOff();
-                    startActivity(new Intent(MainActivity.this, EmptyActivity.class));
+                    floatingActionMenu.toggleOffImmediately();
+//                    startActivity(new Intent(MainActivity.this, EmptyActivity.class));
                 }
             }
         });
