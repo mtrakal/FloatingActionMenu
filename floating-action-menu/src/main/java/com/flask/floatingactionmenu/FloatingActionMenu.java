@@ -168,6 +168,7 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
         if(!immediately) {
             createCollapseAnimations();
         } else {
+            fadingBackgroundView.setAlpha(0f);
             for (FloatingActionButton fab : fabList) {
                 if (!fab.equals(fabToggle)) {
                     fab.setVisibility(GONE);
@@ -335,8 +336,7 @@ public class FloatingActionMenu extends ViewGroup implements OnToggleListener {
         removeAllViews();
     }
 
-    public void toggleOffImmediately() {
-        fadingBackgroundView.setAlpha(0f);
-        toggleOff(true);
+    public boolean toggleOffImmediately() {
+        return toggleOff(true);
     }
 }

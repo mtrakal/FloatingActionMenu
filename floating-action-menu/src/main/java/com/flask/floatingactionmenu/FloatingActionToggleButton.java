@@ -85,7 +85,7 @@ public class FloatingActionToggleButton extends FloatingActionButton {
 		createAnimations();
 
 		if (!isOn) toggleOn(false);
-		else toggleOff(false);
+		else toggleOff(true);
 	}
 
 	public void toggleOn(boolean immediately) {
@@ -150,6 +150,10 @@ public class FloatingActionToggleButton extends FloatingActionButton {
 				if (isDefaultBehavior) toggle();
 			}
 		});
+	}
+
+	public void setToggleStartAnimation(boolean enable) {
+		isDefaultBehavior = enable;
 	}
 
 	public void applyDefaultToggleBehavior() {

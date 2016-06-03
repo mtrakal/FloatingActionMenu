@@ -1,6 +1,5 @@
 package com.flask.floatingactionmenu.sample;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -13,8 +12,6 @@ import com.flask.floatingactionmenu.FadingBackgroundView;
 import com.flask.floatingactionmenu.FloatingActionButton;
 import com.flask.floatingactionmenu.FloatingActionMenu;
 import com.flask.floatingactionmenu.FloatingActionToggleButton;
-
-import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         FadingBackgroundView fadingBackgroundView = (FadingBackgroundView) findViewById(R.id.fading);
         floatingActionMenu.removeAllButtons();
         LayoutInflater li = LayoutInflater.from(this);
-        int FABS_COUNT = 2 + new Random().nextInt(3);
+        int FABS_COUNT = 1 /*2 + new Random().nextInt(3)*/;
         for (int i = 0; i < FABS_COUNT; i++) {
 
             FloatingActionButton fab;
@@ -78,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (fab instanceof FloatingActionToggleButton) {
                     FloatingActionToggleButton fatb = (FloatingActionToggleButton) fab;
+                    fatb.setToggleStartAnimation(fabCount != 1);
                     if (fatb.isToggleOn() || fabCount == 1) {
                         toast(fatb.getLabelText());
                     }
